@@ -7,7 +7,6 @@
 #include <signal.h>
 
 #include "./assert.h"
-#include "../../mods/clu/header.h"
 
 #define TEST_LIB printf("\n%s\t\t", __func__);
 
@@ -36,8 +35,8 @@
         }                       \
     }
 
-#define TEST_CASE_CLOSE             \
-        assert(clu_mem_is_empty()); \
+#define TEST_CASE_CLOSE(TEST_MEM)   \
+        TEST_MEM;                   \
     TEST_DEFAULT_CLOSE
 
 #define TEST_REVERT_OPEN                                        \
