@@ -102,6 +102,8 @@
         else                                            \
         {
 
+#define TEST_TIMEOUT_OPEN_DEFAULT TEST_TIMEOUT_OPEN(TEST_TIMEOUT_DEFAULT)
+
 #define TEST_TIMEOUT_CLOSE TEST_DEFAULT_CLOSE
 
 #define ARG_OPEN(...) __VA_ARGS__
