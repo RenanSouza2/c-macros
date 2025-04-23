@@ -11,14 +11,16 @@
 
 #define TEST_LIB printf("\n%s\t\t", __func__);
 
-#define TEST_FN_OPEN                \
-    printf("\n\t%s\t\t", __func__); \
-    bool __is_main_process = true;
+#define TEST_FN_OPEN                    \
+    {                                   \
+        printf("\n\t%s\t\t", __func__); \
+        bool __is_main_process = true;
 
-#define TEST_FN_CLOSE       \
-    TEST_ASSERT_EMPTY       \
-    if(!__is_main_process)  \
-        exit(EXIT_SUCCESS)
+#define TEST_FN_CLOSE           \
+        TEST_ASSERT_EMPTY       \
+        if(!__is_main_process)  \
+            exit(EXIT_SUCCESS); \
+    }
 
 #define TEST_CASE_OPEN(TAG)                                                                     \
     if(__is_main_process)                                                                       \
@@ -39,17 +41,10 @@
         }                                                                                       \
         else                                                                                    \
         {                                                                                       \
-            usleep(0);                                                                          \
-            __is_main_process = false
+            __is_main_process = false;
 
-#define TEST_DEFAULT_CLOSE      \
-            exit(EXIT_SUCCESS); \
-        }                       \
-    }
-
-#define TEST_CASE_CLOSE         \
-            TEST_ASSERT_EMPTY   \
-        }                       \
+#define TEST_CASE_CLOSE \
+        }               \
     }
 
 #define TEST_REVERT_OPEN                                        \
@@ -73,7 +68,10 @@
             }                                                   \
             usleep(0);
 
-#define TEST_REVERT_CLOSE TEST_DEFAULT_CLOSE
+#define TEST_REVERT_CLOSE       \
+            exit(EXIT_SUCCESS); \
+        }                       \
+    }
 
 #define TEST_TIMEOUT_DEFAULT 5
 
@@ -116,7 +114,10 @@
 
 #define TEST_TIMEOUT_OPEN_DEFAULT TEST_TIMEOUT_OPEN(TEST_TIMEOUT_DEFAULT)
 
-#define TEST_TIMEOUT_CLOSE TEST_DEFAULT_CLOSE
+#define TEST_TIMEOUT_CLOSE      \
+            exit(EXIT_SUCCESS); \
+        }                       \
+    }                           \
 
 #define ARG_OPEN(...) __VA_ARGS__
 
