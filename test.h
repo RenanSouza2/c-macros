@@ -17,7 +17,7 @@
         bool __is_main_process = true;
 
 #define TEST_FN_CLOSE           \
-        TEST_ASSERT_EMPTY       \
+        TEST_ASSERT_MEM_EMPTY   \
         if(!__is_main_process)  \
             exit(EXIT_SUCCESS); \
     }
