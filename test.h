@@ -27,34 +27,34 @@
     {                                                                                           \
         if(show)                                                                                \
             printf("\n\t\t%s %2d\t\t", __func__, (int)(TAG));                                   \
-        int pid_test = fork();                                                                       \
-        assert(pid_test >= 0);                                                                       \
-        if(pid_test)                                                                                 \
+        int pid_test = fork();                                                                  \
+        assert(pid_test >= 0);                                                                  \
+        if(pid_test)                                                                            \
         {                                                                                       \
-            pid_t pid_timeout = fork();                 \
-            if(pid_timeout < 0)                         \
-            {                                           \
-                kill(pid_test, SIGKILL);                \
-                exit(EXIT_FAILURE);                     \
-            }                                           \
-            if(pid_timeout == 0)                        \
-            {                                           \
-                sleep(TIMEOUT);                         \
-                exit(EXIT_SUCCESS);                     \
-            }                                           \
-            int status;                                 \
-            pid_t pid_return = waitpid(0, &status, 0);  \
-            assert(pid_return > 0);                     \
-            if(pid_return == pid_timeout)               \
-            {                                           \
-                kill(pid_test, SIGKILL);                \
-                printf("\n\n\tTest timeout\n\n");       \
-                exit(EXIT_FAILURE);                     \
-            }                                           \
-            kill(pid_timeout, SIGKILL);                 \
+            pid_t pid_timeout = fork();                                                         \
+            if(pid_timeout < 0)                                                                 \
+            {                                                                                   \
+                kill(pid_test, SIGKILL);                                                        \
+                exit(EXIT_FAILURE);                                                             \
+            }                                                                                   \
+            if(pid_timeout == 0)                                                                \
+            {                                                                                   \
+                sleep(TEST_TIMEOUT);                                                            \
+                exit(EXIT_SUCCESS);                                                             \
+            }                                                                                   \
+            int status;                                                                         \
+            pid_t pid_return = waitpid(0, &status, 0);                                          \
+            assert(pid_return > 0);                                                             \
+            if(pid_return == pid_timeout)                                                       \
+            {                                                                                   \
+                kill(pid_test, SIGKILL);                                                        \
+                printf("\n\n\tTest timeout\n\n");                                               \
+                exit(EXIT_FAILURE);                                                             \
+            }                                                                                   \
+            kill(pid_timeout, SIGKILL);                                                         \
             if(status != EXIT_SUCCESS)                                                          \
             {                                                                                   \
-                printf("\n\n\tERROR TEST\t| l:%d | %s %d\t\t", __LINE__, __func__, (int)(TAG)); \
+                printf("\n\n\tERROR TEST\t| l:%d | %s %d\n\n", __LINE__, __func__, (int)(TAG)); \
                 exit(EXIT_FAILURE);                                                             \
             }                                                                                   \
         }                                                                                       \
