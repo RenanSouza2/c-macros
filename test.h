@@ -15,12 +15,14 @@
     {                                   \
         printf("\n\t%s\t\t", __func__); \
         bool __is_main_process = true;  \
+        bool __test_memory = true;      \
         int __tag = 0;
 
-#define TEST_FN_CLOSE           \
-        TEST_ASSERT_MEM_EMPTY   \
-        if(!__is_main_process)  \
-            exit(EXIT_SUCCESS); \
+#define TEST_FN_CLOSE               \
+        if(__test_memory)           \
+            TEST_ASSERT_MEM_EMPTY   \
+        if(!__is_main_process)      \
+            exit(EXIT_SUCCESS);     \
     }
 
 #define TEST_LOG_ERROR(...)                                                         \
@@ -103,10 +105,11 @@
         else                                                            \
         {                                                               \
             if(                                                         \
-                freopen("/dev/null", "w", stdout) == NULL ||            \
-                freopen("/dev/null", "w", stderr) == NULL               \
+                freopen("/dev/null", "w", stderr) == NULL ||            \
+                freopen("/dev/null", "w", stdout) == NULL               \
             )                                                           \
             {                                                           \
+                printf("\n\n\tERROR REDIRECTING STD BUFFERS\n\n");      \
                 exit(EXIT_SUCCESS);                                     \
             }                                                           \
             usleep(0);
@@ -114,6 +117,7 @@
 #define TEST_REVERT_CLOSE       \
             exit(EXIT_SUCCESS); \
         }                       \
+        __test_memory = false;  \
     }
 
 #define ARG_OPEN(...) __VA_ARGS__
