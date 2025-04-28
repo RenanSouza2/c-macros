@@ -1,5 +1,5 @@
-#ifndef __TEST_REVERT_H__
-#define __TEST_REVERT_H__
+#ifndef __TEST_H__
+#define __TEST_H__
 
 #include <stdbool.h>
 #include <sys/wait.h>
@@ -55,7 +55,7 @@
             }                                                       \
             if(pid_timeout == 0)                                    \
             {                                                       \
-                sleep(TEST_TIMEOUT);                                \
+                sleep(TEST_CASE_TIMEOUT);                                \
                 exit(EXIT_SUCCESS);                                 \
             }                                                       \
             int status;                                             \
