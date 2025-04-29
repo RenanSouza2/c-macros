@@ -40,7 +40,6 @@
         if(show)                                                    \
             printf("\n\t\t%s %2d\t\t", __func__, __tag);            \
         int pid_test = fork();                                      \
-        assert(pid_test >= 0);                                      \
         if(pid_test < 0)                                            \
         {                                                           \
             TEST_LOG_ERROR("FORKING TEST")                          \
@@ -55,12 +54,15 @@
             }                                                       \
             if(pid_timeout == 0)                                    \
             {                                                       \
-                sleep(TEST_CASE_TIMEOUT);                                \
+                usleep(TEST_CASE_TIMEOUT_MS * 1000);                \
                 exit(EXIT_SUCCESS);                                 \
             }                                                       \
             int status;                                             \
             pid_t pid_return = waitpid(0, &status, 0);              \
-            assert(pid_return > 0);                                 \
+            if(pid_return < 0)                                      \
+            {                                                       \
+                TEST_LOG_ERROR("WAITPID RETURNED %d", pid_return)   \
+            }                                                       \
             if(pid_return == pid_timeout)                           \
             {                                                       \
                 kill(pid_test, SIGKILL);                            \
@@ -88,7 +90,6 @@
 #define TEST_REVERT_OPEN                                                \
     {                                                                   \
         int pid = fork();                                               \
-        assert(pid >= 0);                                               \
         if(pid < 0)                                                     \
         {                                                               \
             TEST_LOG_ERROR("ERROR FORKING");                            \
@@ -96,7 +97,10 @@
         if(pid)                                                         \
         {                                                               \
             int status;                                                 \
-            assert(waitpid(pid, &status, 0) >= 0);                      \
+            if(waitpid(pid, &status, 0) < 0)                            \
+            {                                                           \
+                TEST_LOG_ERROR("WAITPID RETURNED INVALID");             \
+            }                                                           \
             if(status == EXIT_SUCCESS)                                  \
             {                                                           \
                 TEST_LOG_ERROR("TEST EXPECTED TO REVERT BUT DIDN'T");   \
