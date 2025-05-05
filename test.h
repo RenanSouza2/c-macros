@@ -33,90 +33,103 @@
         exit(EXIT_FAILURE);                                                         \
     }
 
-#define TEST_CASE_OPEN(TAG)                                         \
-    if(__is_main_process)                                           \
-    {                                                               \
-        __tag = (int)(TAG);                                         \
-        if(show)                                                    \
-            printf("\n\t\t%s %2d\t\t", __func__, __tag);            \
-        int pid_test = fork();                                      \
-        if(pid_test < 0)                                            \
-        {                                                           \
-            TEST_LOG_ERROR("FORKING TEST")                          \
-        }                                                           \
-        if(pid_test)                                                \
-        {                                                           \
-            pid_t pid_timeout = fork();                             \
-            if(pid_timeout < 0)                                     \
-            {                                                       \
-                kill(pid_test, SIGKILL);                            \
-                TEST_LOG_ERROR("FORKING TIMEOUT")                   \
-            }                                                       \
-            if(pid_timeout == 0)                                    \
-            {                                                       \
-                usleep(TEST_CASE_TIMEOUT_MS * 1000);                \
-                exit(EXIT_SUCCESS);                                 \
-            }                                                       \
-            int status;                                             \
-            pid_t pid_return = waitpid(0, &status, 0);              \
-            if(pid_return < 0)                                      \
-            {                                                       \
-                TEST_LOG_ERROR("WAITPID RETURNED %d", pid_return)   \
-            }                                                       \
-            if(pid_return == pid_timeout)                           \
-            {                                                       \
-                kill(pid_test, SIGKILL);                            \
-                TEST_LOG_ERROR("TEST TIMEOUT")                      \
-            }                                                       \
-            if(pid_return != pid_test)                              \
-            {                                                       \
-                TEST_LOG_ERROR("INVALID PID CAUGHT %d", pid_return) \
-            }                                                       \
-            kill(pid_timeout, SIGKILL);                             \
-            waitpid(pid_timeout, NULL, 0);                          \
-            if(status != EXIT_SUCCESS)                              \
-            {                                                       \
-                TEST_LOG_ERROR("ERROR IN TEST EXECUTION ")          \
-            }                                                       \
-        }                                                           \
-        else                                                        \
-        {                                                           \
-            __is_main_process = false;
+bool start_case(bool show, int __tag)
+{
+    if(show)
+        printf("\n\t\t%s %2d\t\t", __func__, __tag);
+    int pid_test = fork();
+    if(pid_test < 0)
+    {
+        TEST_LOG_ERROR("FORKING TEST")
+    }
+    if(pid_test)
+    {
+        pid_t pid_timeout = fork();
+        if(pid_timeout < 0)
+        {
+            kill(pid_test, SIGKILL);
+            TEST_LOG_ERROR("FORKING TIMEOUT")
+        }
+        if(pid_timeout == 0)
+        {
+            usleep(TEST_CASE_TIMEOUT_MS * 1000);
+            exit(EXIT_SUCCESS);
+        }
+        int status;
+        pid_t pid_return = waitpid(0, &status, 0);
+        if(pid_return < 0)
+        {
+            TEST_LOG_ERROR("WAITPID RETURNED %d", pid_return)
+        }
+        if(pid_return == pid_timeout)
+        {
+            kill(pid_test, SIGKILL);
+            TEST_LOG_ERROR("TEST TIMEOUT")
+        }
+        if(pid_return != pid_test)
+        {
+            TEST_LOG_ERROR("INVALID PID CAUGHT %d", pid_return)
+        }
+        kill(pid_timeout, SIGKILL);
+        waitpid(pid_timeout, NULL, 0);
+        if(status != EXIT_SUCCESS)
+        {
+            TEST_LOG_ERROR("ERROR IN TEST EXECUTION ")
+        }
+    }
+    return pid_test != 0;
+}
+
+#define TEST_CASE_OPEN(TAG)                             \
+    if(__is_main_process)                               \
+    {                                                   \
+        __tag = (int)(TAG);                             \
+        __is_main_process = start_case(show, __tag);    \
+        if(!__is_main_process)                          \
+        {                                               \
 
 #define TEST_CASE_CLOSE \
         }               \
     }
 
-#define TEST_REVERT_OPEN                                                \
-    {                                                                   \
-        int pid = fork();                                               \
-        if(pid < 0)                                                     \
-        {                                                               \
-            TEST_LOG_ERROR("ERROR FORKING");                            \
-        }                                                               \
-        if(pid)                                                         \
-        {                                                               \
-            int status;                                                 \
-            if(waitpid(pid, &status, 0) < 0)                            \
-            {                                                           \
-                TEST_LOG_ERROR("WAITPID RETURNED INVALID");             \
-            }                                                           \
-            if(status == EXIT_SUCCESS)                                  \
-            {                                                           \
-                TEST_LOG_ERROR("TEST EXPECTED TO REVERT BUT DIDN'T");   \
-            }                                                           \
-        }                                                               \
-        else                                                            \
-        {                                                               \
-            if(                                                         \
-                freopen("/dev/null", "w", stderr) == NULL ||            \
-                freopen("/dev/null", "w", stdout) == NULL               \
-            )                                                           \
-            {                                                           \
-                printf("\n\n\tERROR REDIRECTING STD BUFFERS\n\n");      \
-                exit(EXIT_SUCCESS);                                     \
-            }                                                           \
-            usleep(0);
+pid_t start_revert(int __tag)
+{
+    int pid = fork();
+    if(pid < 0)
+    {
+        TEST_LOG_ERROR("ERROR FORKING");
+    }
+    if(pid)
+    {
+        int status;
+        if(waitpid(pid, &status, 0) < 0)
+        {
+            TEST_LOG_ERROR("WAITPID RETURNED INVALID");
+        }
+        if(status == EXIT_SUCCESS)
+        {
+            TEST_LOG_ERROR("TEST EXPECTED TO REVERT BUT DIDN'T");
+        }
+    }
+    else
+    {
+        if(
+            freopen("/dev/null", "w", stderr) == NULL ||
+            freopen("/dev/null", "w", stdout) == NULL
+        )
+        {
+            printf("\n\n\tERROR REDIRECTING STD BUFFERS\n\n");
+            exit(EXIT_SUCCESS);
+        }
+        usleep(0);
+    }
+    return pid;
+}
+
+#define TEST_REVERT_OPEN                \
+    {                                   \
+        if(start_revert(__tag) == 0)    \
+        {
 
 #define TEST_REVERT_CLOSE       \
             exit(EXIT_SUCCESS); \
