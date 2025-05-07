@@ -110,7 +110,7 @@ bool start_case(int __tag, int line, char const func[], bool show)
         }               \
     }
 
-pid_t start_revert(int __tag, int line, char func[])
+pid_t start_revert(int __tag, int line, char const func[])
 {
     int pid = fork();
     if(pid < 0)
@@ -144,9 +144,9 @@ pid_t start_revert(int __tag, int line, char func[])
     return pid;
 }
 
-#define TEST_REVERT_OPEN                            \
-    {                                               \
-        if(start_revert(__tag, line, func) == 0)    \
+#define TEST_REVERT_OPEN                                    \
+    {                                                       \
+        if(start_revert(__tag, __LINE__, __func__) == 0)    \
         {
 
 #define TEST_REVERT_CLOSE       \
