@@ -8,7 +8,7 @@
 #include <signal.h>
 #include <stdarg.h>
 
-#include "./assert.h"
+#include "assert.h"
 
 #define TEST_LIB printf("\n%s\t\t", __func__);
 
