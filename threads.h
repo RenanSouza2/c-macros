@@ -2,4 +2,4 @@
 
 #include "assert.h"
 
-#define TREAT(CALL) assert((CALL) != -1);
+#define TREAT(CALL) assert((CALL) == 0);
