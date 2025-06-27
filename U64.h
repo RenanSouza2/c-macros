@@ -5,6 +5,8 @@
 
 #define U64(VALUE) ((uint64_t)(VALUE))
 
+typedef uint64_t * uint64_p;
+
 #ifdef __linux__
 
 #define D64P(C) "%" #C "ld"
