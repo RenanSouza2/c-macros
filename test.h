@@ -46,6 +46,16 @@ pid_t fork_assert(int __tag, int line, char const func[], char fork_tag[])
     return pid;
 }
 
+pid_t waitpid_assert(int __tag, int line, char const func[], pid_t pid, int *status)
+{
+    pid_t pid_return = waitpid(pid, status, 0);
+    if(pid_return <= 0)
+    {
+        test_log_error(__tag, line, func, "WAITPID RETURNED %d", pid_return);
+    }
+    return pid_return;
+}
+
 // returns true if main process
 bool start_case(int __tag, int line, char const func[], bool show)
 {
@@ -56,7 +66,7 @@ bool start_case(int __tag, int line, char const func[], bool show)
     if(pid)
     {
         int status;
-        waitpid(pid, &status, 0);
+        waitpid_assert(__tag, line, func, pid, &status);
         assert(status == EXIT_SUCCESS);
         return true;
     }
@@ -65,32 +75,35 @@ bool start_case(int __tag, int line, char const func[], bool show)
     if(pid_test == 0)
         return false;
 
-    pid_t pid_timeout = fork_assert(__tag, line, func, "TIMEOUT");
-    if(pid_timeout == 0)
-    {
-        usleep(TEST_CASE_TIMEOUT_MS * 1000);
-        exit(EXIT_SUCCESS);
-    }
-
     int status;
-    pid_t pid_return = waitpid(0, &status, 0);
-    if(pid_return < 0)
+    if(TEST_CASE_TIMEOUT_MS)
     {
-        test_log_error(__tag, line, func, "WAITPID RETURNED %d", pid_return);
+        pid_t pid_timeout = fork_assert(__tag, line, func, "TIMEOUT");
+        if(pid_timeout == 0)
+        {
+            usleep(TEST_CASE_TIMEOUT_MS * 1000);
+            exit(EXIT_SUCCESS);
+        }
+
+        pid_t pid_return = waitpid_assert(__tag, line, func, 0, &status);
+        if(pid_return == pid_timeout)
+        {
+            kill(pid_test, SIGKILL);
+            test_log_error(__tag, line, func, "TEST TIMEOUT");
+        }
+
+        if(pid_return != pid_test)
+        {
+            test_log_error(__tag, line, func, "INVALID PID CAUGHT %d", pid_return);
+        }
+
+        kill(pid_timeout, SIGKILL);
+    }
+    else
+    {
+        waitpid_assert(__tag, line, func, pid_test, &status);
     }
 
-    if(pid_return == pid_timeout)
-    {
-        kill(pid_test, SIGKILL);
-        test_log_error(__tag, line, func, "TEST TIMEOUT");
-    }
-
-    if(pid_return != pid_test)
-    {
-        test_log_error(__tag, line, func, "INVALID PID CAUGHT %d", pid_return);
-    }
-
-    kill(pid_timeout, SIGKILL);
     if(status != EXIT_SUCCESS)
     {
         test_log_error(__tag, line, func, "ERROR IN TEST EXECUTION ");
@@ -120,10 +133,7 @@ pid_t start_revert(int __tag, int line, char const func[])
     if(pid)
     {
         int status;
-        if(waitpid(pid, &status, 0) < 0)
-        {
-            test_log_error(__tag, line, func, "WAITPID RETURNED INVALID");
-        }
+        waitpid_assert(__tag, line, func, pid, &status);
         if(status == EXIT_SUCCESS)
         {
             test_log_error(__tag, line, func, "TEST EXPECTED TO REVERT BUT DIDN'T");
