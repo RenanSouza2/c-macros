@@ -5,11 +5,11 @@
 
 #include "uint.h"
 
-#define TIME_BEGIN _time_begin = get_time();
+#define TIME_RESET _time_begin = get_time();
 
 #define TIME_SETUP                      \
     uint64_t _time_begin, _time_end;    \
-    TIME_BEGIN
+    TIME_RESET
 
 #define TIME_END(TIME_VAR)                          \
     _time_end = get_time();                         \
