@@ -3,7 +3,7 @@
 
 #include <time.h>
 
-#include "U64.h"
+#include "uint.h"
 
 #define TIME_BEGIN _time_begin = get_time();
 

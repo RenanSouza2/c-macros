@@ -6,6 +6,7 @@
 #define U64(VALUE) ((uint64_t)(VALUE))
 
 typedef uint64_t * uint64_p;
+typedef __uint128_t uint128_t;
 
 #ifdef __linux__
 
