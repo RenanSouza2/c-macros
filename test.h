@@ -1,7 +1,6 @@
 #ifndef __TEST_H__
 #define __TEST_H__
 
-#include <stdint.h>
 #include <stdbool.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -10,6 +9,7 @@
 #include <stdarg.h>
 
 #include "assert.h"
+#include "uint.h"
 
 #define TEST_LIB printf("\n%s\t\t", __func__);
 
@@ -31,7 +31,7 @@ void test_log_error(uint64_t __tag, uint64_t line, char const func[], char forma
 {
     va_list args;
     va_start(args, format);
-    printf("\n\n\tERROR TEST\t| l: %lu | %s %lu | ", line, func, __tag);
+    printf("\n\n\tERROR TEST\t| l: " U64P() " | %s " U64P() " | ", line, func, __tag);
     vprintf(format, args);
     printf("\n\n");
     exit(EXIT_FAILURE);
@@ -61,7 +61,7 @@ pid_t waitpid_assert(uint64_t __tag, uint64_t line, char const func[], pid_t pid
 bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uint64_t timeout)
 {
     if(show)
-        printf("\n\t\t%s %2lu\t\t", func, __tag);
+        printf("\n\t\t%s " U64P(2) "\t\t", func, __tag);
 
     pid_t pid = fork_assert(__tag, line, func, "TEST");
     if(pid)
