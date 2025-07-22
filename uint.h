@@ -7,7 +7,7 @@
 
 typedef uint64_t * uint64_p;
 typedef __uint128_t uint128_t;
-typedef __iint128_t iint128_t;
+typedef __int128_t int128_t;
 
 #ifdef __linux__
 
