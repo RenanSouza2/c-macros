@@ -30,6 +30,16 @@
         __assert_rtn(__func__, __ASSERT_FILE_NAME, __LINE__, #COND);    \
     }
 
-#endif
+#endif // __APPLE__
 
-#endif
+#ifdef DEBUG
+
+#define assert_dbg(COND) assert(COND)
+
+#else
+
+#define assert_dbg(COND)
+
+#endif // DEBUG
+
+#endif // __ASSERT_H__
