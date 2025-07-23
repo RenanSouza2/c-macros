@@ -12,31 +12,25 @@
     if(!(COND))             \
         exit(EXIT_FAILURE); \
 
-#elif defined __linux__
+#elif defined DEBUG
 
-#define assert(COND)                                                    \
-    if(!(COND))                                                         \
-    {                                                                   \
-        fprintf(stderr, "\n\n");                                        \
-        __assert_fail(#COND, __FILE__, __LINE__, __ASSERT_FUNCTION);    \
+#define assert(COND)                \
+    if(!(COND))                     \
+    {                               \
+        fprintf(stderr, "\n\n");    \
+        fprintf(stderr, "%s:%d: %s: Assertion '%s' failled", __FILE__, __LINE__, __ASSERT_FUNCTION, #COND);    \
+        fprintf(stderr, "\n");      \
+        *((int*)0xDEAD) = 1;        \
+        exit(EXIT_FAILURE);         \
     }
-
-#elif defined __APPLE__
-
-#define assert(COND)                                                    \
-    if(!(COND))                                                         \
-    {                                                                   \
-        fprintf(stderr, "\n\n");                                        \
-        __assert_rtn(__func__, __ASSERT_FILE_NAME, __LINE__, #COND);    \
-    }
-
-#endif // __APPLE__
-
-#ifdef DEBUG
 
 #define assert_dbg(COND) assert(COND)
 
 #else
+
+#define assert(COND)        \
+    if(!(COND))             \
+        exit(EXIT_FAILURE); \
 
 #define assert_dbg(COND)
 
