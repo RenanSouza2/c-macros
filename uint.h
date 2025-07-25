@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #define U64(VALUE) ((uint64_t)(VALUE))
+#define B(BITS) (1UL << (BITS))
 
 typedef uint64_t * uint64_p;
 typedef __uint128_t uint128_t;
