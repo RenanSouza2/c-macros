@@ -6,13 +6,7 @@
 
 #undef  assert
 
-#ifdef NDEBUG
-
-#define assert(COND)        \
-    if(!(COND))             \
-        exit(EXIT_FAILURE); \
-
-#elif defined DEBUG
+#ifdef DEBUG
 
 #define assert(COND)                \
     if(!(COND))                     \
@@ -25,6 +19,12 @@
     }
 
 #define assert_dbg(COND) assert(COND)
+
+#define dprintf(...)                    \
+    {                                   \
+        printf("\n%s\t| ", __func__);   \
+        printf(__VA_ARGS__);            \
+    }                                   \
 
 #else
 

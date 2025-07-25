@@ -112,13 +112,6 @@ bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uin
     exit(EXIT_SUCCESS);
 }
 
-#define TEST_CASE_OPEN(TAG)                                                                     \
-    if(__is_main_process)                                                                       \
-    {                                                                                           \
-        __tag = (uint64_t)(TAG);                                                                \
-        __is_main_process = start_case(__tag, __LINE__, __func__, show, TEST_CASE_TIMEOUT_MS);  \
-        if(!__is_main_process)                                                                  \
-        {
 
 
 #define TEST_CASE_OPEN_TIMEOUT(TAG, TIMEOUT)                                        \
@@ -129,6 +122,7 @@ bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uin
         if(!__is_main_process)                                                      \
         {
 
+#define TEST_CASE_OPEN(TAG) TEST_CASE_OPEN_TIMEOUT(TAG, TEST_CASE_TIMEOUT_MS)
 
 #define TEST_CASE_CLOSE \
         }               \
