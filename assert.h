@@ -29,8 +29,13 @@
 #else
 
 #define assert(COND)        \
-    if(!(COND))             \
-        exit(EXIT_FAILURE); \
+    if(!(COND))                     \
+    {                               \
+        fprintf(stderr, "\n\n");    \
+        fprintf(stderr, "%s:%d: %s: Assertion '%s' failled", __FILE__, __LINE__, __ASSERT_FUNCTION, #COND);    \
+        fprintf(stderr, "\n");      \
+        exit(EXIT_FAILURE);         \
+    }
 
 #define assert_dbg(COND)
 
