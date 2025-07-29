@@ -4,6 +4,11 @@
 #include <stdint.h>
 
 #define U64(VALUE) ((uint64_t)(VALUE))
+#define U128(V) ((uint128_t)(V))
+#define U128_IMMED(V1, V2) ((U128(V1) << 64) | (V2))
+#define MUL(V1, V2) U128(V1) * U128(V2)
+#define LOW(V) U64(V)
+#define HIGH(V) U64((V) >> 64)
 #define B(BITS) (1UL << (BITS))
 
 typedef uint64_t * uint64_p;
