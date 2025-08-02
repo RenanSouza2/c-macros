@@ -24,7 +24,8 @@
     {                                   \
         printf("\n%s\t| ", __func__);   \
         printf(__VA_ARGS__);            \
-    }                                   \
+        printf("\t");                   \
+    }
 
 #else
 
