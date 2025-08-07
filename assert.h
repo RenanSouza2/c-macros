@@ -20,13 +20,6 @@
 
 #define assert_dbg(COND) assert(COND)
 
-#define dprintf(...)                    \
-    {                                   \
-        printf("\n%s\t| ", __func__);   \
-        printf(__VA_ARGS__);            \
-        printf("\t");                   \
-    }
-
 #else
 
 #define assert(COND)        \
@@ -41,5 +34,12 @@
 #define assert_dbg(COND)
 
 #endif // DEBUG
+
+#define tprintf(...)                    \
+    {                                   \
+        fprintf(stderr, "\n%s\t| ", __func__);   \
+        fprintf(stderr, __VA_ARGS__);            \
+        fprintf(stderr, "\t");                   \
+    }
 
 #endif // __ASSERT_H__
