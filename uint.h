@@ -2,6 +2,7 @@
 #define __U64_H__
 
 #include <stdint.h>
+#include <inttypes.h>
 
 typedef uint64_t * uint64_p;
 typedef __uint128_t uint128_t;
@@ -21,19 +22,9 @@ typedef __int128_t int128_t;
 #define INT128_MAX I128(U128HL(UINT64_MAX / 2, UINT64_MAX))
 #define INT128_MIN I128(U128HL(B(63), 0))
 
-#ifdef __linux__
-
-#define D64P(C) "%" #C "ld"
-#define U64P(C) "%" #C "lu"
-#define U64PX "%016lx"
-
-#elif defined __APPLE__
-
-#define D64P(C) "%" #C "lld"
-#define U64P(C) "%" #C "llu"
-#define U64PX "%016llx"
-
-#endif
+#define D64P(C) "%" #C PRIi64
+#define U64P(C) "%" #C PRIu64
+#define U64PX "%016" PRIx64
 
 #define U128PX U64P U64P
 #define U128A(C) HIGH(C), LOW(C)
