@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <stdarg.h>
+#include <time.h>
 
 #include "assert.h"
 #include "uint.h"
@@ -58,7 +59,7 @@ pid_t waitpid_assert(uint64_t __tag, uint64_t line, char const func[], pid_t pid
 }
 
 // returns true if main process
-bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uint64_t timeout)
+bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uint64_t timeout_ms)
 {
     if(show)
         printf("\n\t\t%s " U64P(2) "\t\t", func, __tag);
@@ -77,12 +78,17 @@ bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uin
         return false;
 
     int status;
-    if(timeout)
+    if(timeout_ms)
     {
         pid_t pid_timeout = fork_assert(__tag, line, func, "TIMEOUT");
         if(pid_timeout == 0)
         {
-            usleep(timeout * 1000);
+            struct timespec spec = (struct timespec)
+            {
+                .tv_sec = (long)(timeout_ms / 1000),
+                .tv_nsec = (long)((timeout_ms % 1000) * 1000000)
+            };
+            nanosleep(&spec, NULL);
             exit(EXIT_SUCCESS);
         }
 
@@ -154,7 +160,8 @@ pid_t start_revert(uint64_t __tag, uint64_t line, char const func[])
             printf("\n\n\tERROR REDIRECTING STD BUFFERS\n\n");
             exit(EXIT_SUCCESS);
         }
-        usleep(0);
+        struct timespec spec = (struct timespec) {0};
+        nanosleep(&spec, NULL);
     }
     return pid;
 }
