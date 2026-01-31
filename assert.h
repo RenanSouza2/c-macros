@@ -6,30 +6,40 @@
 
 #undef  assert
 
-#ifdef NDEBUG
+#ifdef DEBUG
+
+#define assert(COND)                \
+    if(!(COND))                     \
+    {                               \
+        fprintf(stderr, "\n\n");    \
+        fprintf(stderr, "%s:%d: %s: Assertion '%s' failled", __FILE__, __LINE__, __ASSERT_FUNCTION, #COND);    \
+        fprintf(stderr, "\n");      \
+        *((int*)0xDEAD) = 1;        \
+        exit(EXIT_FAILURE);         \
+    }
+
+#define assert_dbg(COND) assert(COND)
+
+#else
 
 #define assert(COND)        \
-    if(!(COND))             \
-        exit(EXIT_FAILURE); \
-
-#elif defined __linux__
-
-#define assert(COND)                                                    \
-    if(!(COND))                                                         \
-    {                                                                   \
-        fprintf(stderr, "\n\n");                                        \
-        __assert_fail(#COND, __FILE__, __LINE__, __ASSERT_FUNCTION);    \
+    if(!(COND))                     \
+    {                               \
+        fprintf(stderr, "\n\n");    \
+        fprintf(stderr, "%s:%d: %s: Assertion '%s' failled", __FILE__, __LINE__, __ASSERT_FUNCTION, #COND);    \
+        fprintf(stderr, "\n");      \
+        exit(EXIT_FAILURE);         \
     }
 
-#elif defined __APPLE__
+#define assert_dbg(COND)
 
-#define assert(COND)                                                    \
-    if(!(COND))                                                         \
-    {                                                                   \
-        fprintf(stderr, "\n\n");                                        \
-        __assert_rtn(__func__, __ASSERT_FILE_NAME, __LINE__, #COND);    \
+#endif // DEBUG
+
+#define tprintf(...)                    \
+    {                                   \
+        fprintf(stderr, "\n%s\t| ", __func__);   \
+        fprintf(stderr, __VA_ARGS__);            \
+        fprintf(stderr, "\t");                   \
     }
 
-#endif
-
-#endif
+#endif // __ASSERT_H__
