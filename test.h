@@ -28,6 +28,7 @@
             exit(EXIT_SUCCESS);     \
     }
 
+__attribute__((format(printf, 4, 5)))
 void test_log_error(uint64_t __tag, uint64_t line, char const func[], char format[], ...)
 {
     va_list args;
