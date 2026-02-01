@@ -18,19 +18,19 @@
             default: __builtin_ctz(x)))
 
     // Count Trailing Zeros (ctz)
-    #define stdc_leading_zeros(x) \
-        ((unsigned int)_Generic((x), \
-            unsigned int: __builtin_clz(x), \
-            unsigned long: __builtin_clzl(x), \
+    #define stdc_leading_zeros(x)                   \
+        ((unsigned int)_Generic((x),                \
+            unsigned int: __builtin_clz(x),         \
+            unsigned long: __builtin_clzl(x),       \
             unsigned long long: __builtin_clzll(x), \
             default: __builtin_clz(x)))
 
     // Count Ones (popcount)
-    #define stdc_count_ones(x) \
-        ((unsigned int)_Generic((x), \
-            unsigned int: __builtin_popcount(x), \
-            unsigned long: __builtin_popcountl(x), \
-            unsigned long long: __builtin_popcountll(x), \
+    #define stdc_count_ones(x)                              \
+        ((unsigned int)_Generic((x),                        \
+            unsigned int: __builtin_popcount(x),            \
+            unsigned long: __builtin_popcountl(x),          \
+            unsigned long long: __builtin_popcountll(x),    \
             default: __builtin_popcount(x)))
 
     // Bit Width (log2)
