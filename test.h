@@ -29,7 +29,7 @@
     }
 
 __attribute__((format(printf, 4, 5)))
-void test_log_error(uint64_t __tag, uint64_t line, char const func[], char format[], ...)
+void test_log_error(uint64_t __tag, uint64_t line, const char func[], const char format[], ...)
 {
     va_list args;
     va_start(args, format);
@@ -39,7 +39,7 @@ void test_log_error(uint64_t __tag, uint64_t line, char const func[], char forma
     exit(EXIT_FAILURE);
 }
 
-pid_t fork_assert(uint64_t __tag, uint64_t line, char const func[], char fork_tag[])
+pid_t fork_assert(uint64_t __tag, uint64_t line, const char func[], const char fork_tag[])
 {
     pid_t pid = fork();
     if(pid < 0)
@@ -49,7 +49,7 @@ pid_t fork_assert(uint64_t __tag, uint64_t line, char const func[], char fork_ta
     return pid;
 }
 
-pid_t waitpid_assert(uint64_t __tag, uint64_t line, char const func[], pid_t pid, int *status)
+pid_t waitpid_assert(uint64_t __tag, uint64_t line, const char func[], pid_t pid, int *status)
 {
     pid_t pid_return = waitpid(pid, status, 0);
     if(pid_return <= 0)
@@ -60,7 +60,7 @@ pid_t waitpid_assert(uint64_t __tag, uint64_t line, char const func[], pid_t pid
 }
 
 // returns true if main process
-bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uint64_t timeout_ms)
+bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uint64_t timeout_ms)
 {
     if(show)
         printf("\n\t\t%s " U64P(2) "\t\t", func, __tag);
@@ -135,7 +135,7 @@ bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uin
         }               \
     }
 
-pid_t start_revert(uint64_t __tag, uint64_t line, char const func[])
+pid_t start_revert(uint64_t __tag, uint64_t line, const char func[])
 {
     pid_t pid = fork();
     if(pid < 0)
