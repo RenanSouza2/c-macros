@@ -5,8 +5,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "uint.h"
-
 __attribute__((unused))
 static pid_t fork_safe(void)
 {
