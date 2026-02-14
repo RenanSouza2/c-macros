@@ -25,6 +25,7 @@ static pid_t waitpid_safe(pid_t pid, int *status)
     {
         exit(EXIT_FAILURE);
     }
+
     return pid_return;
 }
 
