@@ -20,10 +20,16 @@ static pid_t fork_safe(void)
 __attribute__((unused))
 static pid_t waitpid_safe(pid_t pid, int *status)
 {
-    pid_t pid_return = waitpid(pid, status, 0);
+    int _status;
+    pid_t pid_return = waitpid(pid, &_status, 0);
     if(pid_return <= 0)
     {
         exit(EXIT_FAILURE);
+    }
+
+    if(status)
+    {
+        *status = _status;
     }
 
     return pid_return;
