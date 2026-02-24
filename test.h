@@ -2,14 +2,12 @@
 #define __TEST_H__
 
 #include <stdbool.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <signal.h>
 #include <stdarg.h>
 #include <time.h>
 
 #include "assert.h"
+#include "fork.h"
 #include "uint.h"
 
 #define TEST_LIB printf("\n%s\t\t", __func__);
@@ -29,7 +27,7 @@
     }
 
 __attribute__((format(printf, 4, 5)))
-void test_log_error(uint64_t __tag, uint64_t line, char const func[], char format[], ...)
+void test_log_error(uint64_t __tag, uint64_t line, const char func[], const char format[], ...)
 {
     va_list args;
     va_start(args, format);
@@ -39,49 +37,29 @@ void test_log_error(uint64_t __tag, uint64_t line, char const func[], char forma
     exit(EXIT_FAILURE);
 }
 
-pid_t fork_assert(uint64_t __tag, uint64_t line, char const func[], char fork_tag[])
-{
-    pid_t pid = fork();
-    if(pid < 0)
-    {
-        test_log_error(__tag, line, func, "FORKING %s", fork_tag);
-    }
-    return pid;
-}
-
-pid_t waitpid_assert(uint64_t __tag, uint64_t line, char const func[], pid_t pid, int *status)
-{
-    pid_t pid_return = waitpid(pid, status, 0);
-    if(pid_return <= 0)
-    {
-        test_log_error(__tag, line, func, "WAITPID RETURNED %d", pid_return);
-    }
-    return pid_return;
-}
-
 // returns true if main process
-bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uint64_t timeout_ms)
+bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uint64_t timeout_ms)
 {
     if(show)
         printf("\n\t\t%s " U64P(2) "\t\t", func, __tag);
 
-    pid_t pid = fork_assert(__tag, line, func, "TEST");
+    pid_t pid = fork_safe();
     if(pid)
     {
         int status;
-        waitpid_assert(__tag, line, func, pid, &status);
+        waitpid_safe(pid, &status);
         assert(status == EXIT_SUCCESS);
         return true;
     }
 
-    pid_t pid_test = fork_assert(__tag, line, func, "TEST");
+    pid_t pid_test = fork_safe();
     if(pid_test == 0)
         return false;
 
     int status;
     if(timeout_ms)
     {
-        pid_t pid_timeout = fork_assert(__tag, line, func, "TIMEOUT");
+        pid_t pid_timeout = fork_safe();
         if(pid_timeout == 0)
         {
             struct timespec spec = (struct timespec)
@@ -93,7 +71,7 @@ bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uin
             exit(EXIT_SUCCESS);
         }
 
-        pid_t pid_return = waitpid_assert(__tag, line, func, 0, &status);
+        pid_t pid_return = waitpid_safe(0, &status);
         if(pid_return == pid_timeout)
         {
             kill(pid_test, SIGKILL);
@@ -109,7 +87,7 @@ bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uin
     }
     else
     {
-        waitpid_assert(__tag, line, func, pid_test, &status);
+        waitpid_safe(pid_test, &status);
     }
 
     if(status != EXIT_SUCCESS)
@@ -135,7 +113,7 @@ bool start_case(uint64_t __tag, uint64_t line, char const func[], bool show, uin
         }               \
     }
 
-pid_t start_revert(uint64_t __tag, uint64_t line, char const func[])
+pid_t start_revert(uint64_t __tag, uint64_t line, const char func[])
 {
     pid_t pid = fork();
     if(pid < 0)
@@ -145,7 +123,7 @@ pid_t start_revert(uint64_t __tag, uint64_t line, char const func[])
     if(pid)
     {
         int status;
-        waitpid_assert(__tag, line, func, pid, &status);
+        waitpid_safe(pid, &status);
         if(status == EXIT_SUCCESS)
         {
             test_log_error(__tag, line, func, "TEST EXPECTED TO REVERT BUT DIDN'T");

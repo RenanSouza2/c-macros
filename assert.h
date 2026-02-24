@@ -2,6 +2,7 @@
 #define __ASSERT_H__
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 
 
@@ -24,11 +25,11 @@
 
 #ifdef __linux__
 
-#define ASSERT_PRINT(COND) fprintf(stderr, "%s:%d: %s: Assertion '%s' failled", __FILE__, __LINE__, __ASSERT_FUNCTION, COND);
+#define __FN __ASSERT_FUNCTION
 
 #elif defined __APPLE__
 
-#define ASSERT_PRINT(COND) fprintf(stderr, "%s:%d: %s: Assertion '%s' failed\n", __FILE__, __LINE__, __func__, COND);
+#define __FN __func__
 
 #endif
 
@@ -38,7 +39,7 @@
     if(!(COND))                     \
     {                               \
         fprintf(stderr, "\n\n");    \
-        ASSERT_PRINT(#COND)         \
+        fprintf(stderr, "%s:%d: %s: Assertion '%s' failed\n", __FILE__, __LINE__, __FN, #COND);  \
         fprintf(stderr, "\n");      \
         TRIGGER_SANITIZER           \
         exit(EXIT_FAILURE);         \

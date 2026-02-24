@@ -22,6 +22,7 @@
     #define CLU_CLOCK_ID CLOCK_MONOTONIC
 #endif
 
+__attribute__((unused)) 
 static uint64_t get_time(void)
 {
     struct timespec time;
