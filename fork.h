@@ -5,13 +5,15 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "assert.h"
+
 __attribute__((unused))
 static pid_t fork_safe(void)
 {
     pid_t pid = fork();
     if(pid < 0)
     {
-        exit(EXIT_FAILURE);
+        assert(false);
     }
 
     return pid;
@@ -24,7 +26,7 @@ static pid_t waitpid_safe(pid_t pid, int *status)
     pid_t pid_return = waitpid(pid, &_status, 0);
     if(pid_return <= 0)
     {
-        exit(EXIT_FAILURE);
+        assert(false);
     }
 
     if(status)
