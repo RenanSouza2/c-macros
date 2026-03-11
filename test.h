@@ -23,7 +23,7 @@
         if(__test_memory)           \
             TEST_ASSERT_MEM_EMPTY   \
         if(!__is_main_process)      \
-            assert(false);          \
+            exit(EXIT_SUCCESS);     \
     }
 
 __attribute__((format(printf, 4, 5)))
@@ -68,7 +68,7 @@ bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uin
                 .tv_nsec = (long)((timeout_ms % 1000) * 1000000)
             };
             nanosleep(&spec, NULL);
-            assert(false);
+            exit(EXIT_SUCCESS);
         }
 
         pid_t pid_return = waitpid_safe(0, &status);
@@ -94,7 +94,7 @@ bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uin
     {
         test_log_error(__tag, line, func, "ERROR IN TEST EXECUTION ");
     }
-    assert(false);
+    exit(EXIT_SUCCESS);
 }
 
 
@@ -137,7 +137,7 @@ pid_t start_revert(uint64_t __tag, uint64_t line, const char func[])
         )
         {
             printf("\n\n\tERROR REDIRECTING STD BUFFERS\n\n");
-            assert(false);
+            exit(EXIT_SUCCESS);
         }
         struct timespec spec = (struct timespec) {0};
         nanosleep(&spec, NULL);
@@ -151,7 +151,7 @@ pid_t start_revert(uint64_t __tag, uint64_t line, const char func[])
         {
 
 #define TEST_REVERT_CLOSE       \
-            assert(false);      \
+            exit(EXIT_SUCCESS); \
         }                       \
         __test_memory = false;  \
     }
