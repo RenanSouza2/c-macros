@@ -21,9 +21,13 @@
 
 #define TEST_FN_CLOSE               \
         if(__test_memory)           \
+        {                           \
             TEST_ASSERT_MEM_EMPTY   \
+        }                           \
         if(!__is_main_process)      \
+        {                           \
             exit(EXIT_SUCCESS);     \
+        }                           \
     }
 
 __attribute__((format(printf, 4, 5)))
@@ -41,7 +45,9 @@ void test_log_error(uint64_t __tag, uint64_t line, const char func[], const char
 bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uint64_t timeout_ms)
 {
     if(show)
+    {
         printf("\n\t\t%s " U64P(2) "\t\t", func, __tag);
+    }
 
     pid_t pid = fork_safe();
     if(pid)
@@ -54,7 +60,9 @@ bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uin
 
     pid_t pid_test = fork_safe();
     if(pid_test == 0)
+    {   
         return false;
+    }
 
     int status;
     if(timeout_ms)
@@ -111,6 +119,19 @@ bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uin
 
 #define TEST_CASE_CLOSE \
         }               \
+    }
+
+#define TEST_FUZZ_CASE_OPEN(COUNT, TAG)     \
+    {                                       \
+        for(uint64_t _i=0; _i<COUNT; _i++)  \
+        {                                   \
+            TEST_CASE_OPEN(TAG)             \
+            {
+
+#define TEST_FUZZ_CASE_CLOSE    \
+            }                   \
+            TEST_CASE_CLOSE     \
+        }                       \
     }
 
 pid_t start_revert(uint64_t __tag, uint64_t line, const char func[])
