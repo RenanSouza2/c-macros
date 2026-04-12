@@ -30,4 +30,10 @@ static uint64_t get_time(void)
     return (uint64_t)time.tv_sec * 1000000000ULL + (uint64_t)time.tv_nsec;
 }
 
+__attribute__((unused)) 
+static double dtime(uint64_t t)
+{
+    return (double)t / 1e9;
+}
+
 #endif
