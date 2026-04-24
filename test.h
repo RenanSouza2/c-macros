@@ -121,11 +121,11 @@ bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uin
         }               \
     }
 
-#define TEST_FUZZ_CASE_OPEN(TAG, RUNS)                      \
-    {                                                       \
-        for(uint64_t _i=0; _i<RUNS; _i++)                   \
-        {                                                   \
-            TEST_CASE_OPEN((uint64_t)(TAG) * 1000000 + _i)  \
+#define TEST_FUZZ_CASE_OPEN(TAG, RUNS)                                  \
+    {                                                                   \
+        for(uint64_t _i=0; _i<RUNS; _i++)                               \
+        {                                                               \
+            TEST_CASE_OPEN_TIMEOUT((uint64_t)(TAG) * 1000000 + _i, 0)   \
             {
 
 #define TEST_FUZZ_CASE_CLOSE    \
