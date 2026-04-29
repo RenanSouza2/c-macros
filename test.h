@@ -31,7 +31,7 @@
     }
 
 __attribute__((format(printf, 4, 5)))
-void test_log_error(uint64_t __tag, uint64_t line, const char func[], const char format[], ...)
+static void test_log_error(uint64_t __tag, uint64_t line, const char func[], const char format[], ...)
 {
     va_list args;
     va_start(args, format);
@@ -42,7 +42,8 @@ void test_log_error(uint64_t __tag, uint64_t line, const char func[], const char
 }
 
 // returns true if main process
-bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uint64_t timeout_ms)
+__attribute__((unused))
+static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uint64_t timeout_ms)
 {
     if(show)
     {
@@ -134,7 +135,8 @@ bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uin
         }                       \
     }
 
-pid_t start_revert(uint64_t __tag, uint64_t line, const char func[])
+__attribute__((unused))
+static pid_t start_revert(uint64_t __tag, uint64_t line, const char func[])
 {
     pid_t pid = fork();
     if(pid < 0)
