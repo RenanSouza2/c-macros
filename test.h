@@ -1,7 +1,6 @@
 #ifndef __TEST_H__
 #define __TEST_H__
 
-#include <stdbool.h>
 #include <signal.h>
 #include <stdarg.h>
 #include <time.h>
@@ -30,7 +29,7 @@
         }                           \
     }
 
-__attribute__((format(printf, 4, 5)))
+[[noreturn, gnu::format(printf, 4, 5)]]
 static void test_log_error(uint64_t __tag, uint64_t line, const char func[], const char format[], ...)
 {
     va_list args;
@@ -42,7 +41,7 @@ static void test_log_error(uint64_t __tag, uint64_t line, const char func[], con
 }
 
 // returns true if main process
-__attribute__((unused))
+[[maybe_unused]]
 static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uint64_t timeout_ms)
 {
     if(show)
@@ -54,7 +53,7 @@ static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool sh
     if(pid)
     {
         int status;
-        waitpid_safe(pid, &status);
+        (void)waitpid_safe(pid, &status);
         assert(status == EXIT_SUCCESS);
         return true;
     }
@@ -76,7 +75,7 @@ static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool sh
                 .tv_sec = (long)(timeout_ms / 1000),
                 .tv_nsec = (long)((timeout_ms % 1000) * 1000000)
             };
-            nanosleep(&spec, NULL);
+            nanosleep(&spec, nullptr);
             exit(EXIT_SUCCESS);
         }
 
@@ -96,7 +95,7 @@ static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool sh
     }
     else
     {
-        waitpid_safe(pid_test, &status);
+        (void)waitpid_safe(pid_test, &status);
     }
 
     if(status != EXIT_SUCCESS)
@@ -135,7 +134,7 @@ static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool sh
         }                       \
     }
 
-__attribute__((unused))
+[[maybe_unused]]
 static pid_t start_revert(uint64_t __tag, uint64_t line, const char func[])
 {
     pid_t pid = fork();
@@ -146,7 +145,7 @@ static pid_t start_revert(uint64_t __tag, uint64_t line, const char func[])
     if(pid)
     {
         int status;
-        waitpid_safe(pid, &status);
+        (void)waitpid_safe(pid, &status);
         if(status == EXIT_SUCCESS)
         {
             test_log_error(__tag, line, func, "TEST EXPECTED TO REVERT BUT DIDN'T");
@@ -155,15 +154,15 @@ static pid_t start_revert(uint64_t __tag, uint64_t line, const char func[])
     else
     {
         if(
-            freopen("/dev/null", "w", stderr) == NULL ||
-            freopen("/dev/null", "w", stdout) == NULL
+            freopen("/dev/null", "w", stderr) == nullptr ||
+            freopen("/dev/null", "w", stdout) == nullptr
         )
         {
             printf("\n\n\tERROR REDIRECTING STD BUFFERS\n\n");
             exit(EXIT_SUCCESS);
         }
-        struct timespec spec = (struct timespec) {0};
-        nanosleep(&spec, NULL);
+        struct timespec spec = {};
+        nanosleep(&spec, nullptr);
     }
     return pid;
 }

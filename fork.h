@@ -7,7 +7,7 @@
 
 #include "assert.h"
 
-__attribute__((unused))
+[[nodiscard, maybe_unused]]
 static pid_t fork_safe(void)
 {
     pid_t pid = fork();
@@ -19,7 +19,7 @@ static pid_t fork_safe(void)
     return pid;
 }
 
-__attribute__((unused))
+[[nodiscard, maybe_unused]]
 static pid_t waitpid_safe(pid_t pid, int *status)
 {
     int _status;

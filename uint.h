@@ -5,8 +5,8 @@
 #include <inttypes.h>
 
 typedef uint64_t * uint64_p;
-typedef __uint128_t uint128_t;
-typedef __int128_t int128_t;
+typedef unsigned _BitInt(128) uint128_t;
+typedef signed _BitInt(128) int128_t;
 
 #define U64(VALUE) ((uint64_t)(VALUE))
 #define U128(V) ((uint128_t)(V))
@@ -18,9 +18,9 @@ typedef __int128_t int128_t;
 #define B(BITS) (1UL << (BITS))
 #define B128(BITS) (U128(1UL) << (BITS))
 
-#define UINT128_MAX U128HL(UINT64_MAX, UINT64_MAX)
-#define INT128_MAX I128(U128HL(UINT64_MAX / 2, UINT64_MAX))
-#define INT128_MIN I128(U128HL(B(63), 0))
+constexpr uint128_t UINT128_MAX = ~U128(0);
+constexpr int128_t INT128_MAX = I128(UINT128_MAX >> 1);
+constexpr int128_t INT128_MIN = I128(U128(1) << 127);
 
 #define D64P(C) "%" #C PRIi64
 #define U64P(C) "%" #C PRIu64
