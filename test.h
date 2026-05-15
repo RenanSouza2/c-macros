@@ -60,7 +60,7 @@ static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool sh
 
     pid_t pid_test = fork_safe();
     if(pid_test == 0)
-    {   
+    {
         return false;
     }
 
