@@ -41,7 +41,7 @@ static void test_log_error(uint64_t __tag, uint64_t line, const char func[], con
 }
 
 // returns true if main process
-[[maybe_unused]]
+[[nodiscard]]
 static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool show, uint64_t timeout_ms)
 {
     if(show)
@@ -53,7 +53,7 @@ static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool sh
     if(pid)
     {
         int status;
-        (void)waitpid_safe(pid, &status);
+        waitpid_safe(pid, &status);
         assert(status == EXIT_SUCCESS);
         return true;
     }
@@ -79,7 +79,7 @@ static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool sh
             exit(EXIT_SUCCESS);
         }
 
-        pid_t pid_return = waitpid_safe(0, &status);
+        pid_t pid_return = waitpid_child_safe(&status);
         if(pid_return == pid_timeout)
         {
             kill(pid_test, SIGKILL);
