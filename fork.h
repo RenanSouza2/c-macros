@@ -8,7 +8,7 @@
 #include "assert.h"
 
 [[nodiscard, maybe_unused]]
-static pid_t fork_safe(void)
+static pid_t fork_safe()
 {
     pid_t pid = fork();
     if(pid < 0)

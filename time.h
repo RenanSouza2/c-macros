@@ -16,21 +16,21 @@
     uint64_t TIME_VAR = _time_end - _time_begin;    \
     _time_begin = _time_end;
 
-#if defined(__linux__)
+#ifdef __linux__
     #define CLU_CLOCK_ID CLOCK_MONOTONIC_RAW
-#elif defined(__APPLE__)
+#elifdef __APPLE__
     #define CLU_CLOCK_ID CLOCK_MONOTONIC
 #endif
 
 [[nodiscard, maybe_unused]]
-static uint64_t get_time(void)
+static uint64_t get_time()
 {
     struct timespec time;
     clock_gettime(CLU_CLOCK_ID, &time);
     return (uint64_t)time.tv_sec * 1000000000ULL + (uint64_t)time.tv_nsec;
 }
 
-[[maybe_unused]]
+[[nodiscard, maybe_unused, unsequenced]]
 static double dtime(uint64_t t)
 {
     return (double)t / 1e9;
