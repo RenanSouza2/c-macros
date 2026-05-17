@@ -16,7 +16,7 @@ static pid_t fork_safe()
 }
 
 [[nodiscard, maybe_unused]]
-static pid_t _waitpid_safe_internal(pid_t pid, int *status)
+static pid_t waitpid_safe(pid_t pid, int *status)
 {
     int _status;
     pid_t pid_return = waitpid(pid, &_status, 0);
@@ -28,19 +28,6 @@ static pid_t _waitpid_safe_internal(pid_t pid, int *status)
     }
 
     return pid_return;
-}
-
-[[maybe_unused]]
-static void waitpid_safe(pid_t pid, int *status)
-{
-    assert(pid > 0);
-    (void)_waitpid_safe_internal(pid, status);
-}
-
-[[nodiscard, maybe_unused]]
-static pid_t waitpid_child_safe(int *status)
-{
-    return _waitpid_safe_internal(0, status);
 }
 
 #endif

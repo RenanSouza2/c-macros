@@ -30,8 +30,8 @@ static uint64_t get_time()
     return (uint64_t)time.tv_sec * 1000000000ULL + (uint64_t)time.tv_nsec;
 }
 
-[[nodiscard, maybe_unused, unsequenced]]
-static double dtime(uint64_t t)
+[[nodiscard, maybe_unused]]
+static double dtime(uint64_t t) [[unsequenced]]
 {
     return (double)t / 1e9;
 }

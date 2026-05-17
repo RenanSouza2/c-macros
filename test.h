@@ -53,7 +53,7 @@ static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool sh
     if(pid)
     {
         int status;
-        waitpid_safe(pid, &status);
+        (void)waitpid_safe(pid, &status);
         assert(status == EXIT_SUCCESS);
         return true;
     }
