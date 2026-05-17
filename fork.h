@@ -15,7 +15,7 @@ static pid_t fork_safe()
     return pid;
 }
 
-[[nodiscard, maybe_unused]]
+[[maybe_unused]]
 static pid_t waitpid_safe(pid_t pid, int *status)
 {
     int _status;

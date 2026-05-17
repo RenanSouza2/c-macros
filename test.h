@@ -53,7 +53,7 @@ static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool sh
     if(pid)
     {
         int status;
-        (void)waitpid_safe(pid, &status);
+        waitpid_safe(pid, &status);
         assert(status == EXIT_SUCCESS);
         return true;
     }
@@ -79,7 +79,7 @@ static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool sh
             exit(EXIT_SUCCESS);
         }
 
-        pid_t pid_return = waitpid_child_safe(&status);
+        pid_t pid_return = waitpid_safe(0, &status);
         if(pid_return == pid_timeout)
         {
             kill(pid_test, SIGKILL);
@@ -95,7 +95,7 @@ static bool start_case(uint64_t __tag, uint64_t line, const char func[], bool sh
     }
     else
     {
-        (void)waitpid_safe(pid_test, &status);
+        waitpid_safe(pid_test, &status);
     }
 
     if(status != EXIT_SUCCESS)
@@ -145,7 +145,7 @@ static pid_t start_revert(uint64_t __tag, uint64_t line, const char func[])
     if(pid)
     {
         int status;
-        (void)waitpid_safe(pid, &status);
+        waitpid_safe(pid, &status);
         if(status == EXIT_SUCCESS)
         {
             test_log_error(__tag, line, func, "TEST EXPECTED TO REVERT BUT DIDN'T");
