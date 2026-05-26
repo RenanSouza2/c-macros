@@ -1,10 +1,6 @@
 #ifndef CLU_STDBIT_FIX_H
 #define CLU_STDBIT_FIX_H
 
-// 1. If the system actually has the file (Linux/Future Mac), use it.
-#if defined(__has_include) && __has_include(<stdbit.h>)
-    #include <stdbit.h>
-
 // 2. Otherwise, map the C23 standard names to Clang builtins
 #else // has stdbit.h
     #include <stdint.h>
