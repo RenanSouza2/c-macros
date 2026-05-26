@@ -31,7 +31,7 @@ static uint64_t get_time()
 }
 
 [[nodiscard, maybe_unused]]
-static double dtime(uint64_t t) [[unsequenced]]
+static double dtime(uint64_t t)
 {
     return (double)t / 1e9;
 }
