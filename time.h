@@ -3,7 +3,7 @@
 
 #include <time.h>
 
-#include "uint.h"
+#include "uint.h" // IWYU pragma: keep
 
 #define TIME_RESET _time_begin = get_time();
 
@@ -27,7 +27,7 @@ static uint64_t get_time()
 {
     struct timespec time;
     clock_gettime(CLU_CLOCK_ID, &time);
-    return (uint64_t)time.tv_sec * 1000000000ULL + (uint64_t)time.tv_nsec;
+    return ((uint64_t)time.tv_sec * 1000000000ULL) + (uint64_t)time.tv_nsec;
 }
 
 [[nodiscard, maybe_unused]]

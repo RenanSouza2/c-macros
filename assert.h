@@ -1,7 +1,7 @@
 #ifndef __ASSERT_H__
 #define __ASSERT_H__
 
-#include <stdio.h>
+#include <stdio.h> // IWYU pragma: keep
 #include <stdlib.h>
 #include <assert.h>
 

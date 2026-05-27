@@ -1,7 +1,6 @@
 #ifndef __MACROS_FORK_H__
 #define __MACROS_FORK_H__
 
-#include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
 

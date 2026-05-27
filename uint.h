@@ -19,7 +19,9 @@ typedef signed _BitInt(128) int128_t;
 #define B128(BITS) (U128(1) << (BITS))
 
 constexpr uint128_t UINT128_MAX = ~U128(0);
+[[maybe_unused]]
 constexpr int128_t INT128_MAX = I128(UINT128_MAX >> 1);
+[[maybe_unused]]
 constexpr int128_t INT128_MIN = I128(U128(1) << 127);
 
 #define D64P(C) "%" #C PRIi64
