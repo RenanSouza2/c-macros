@@ -9,9 +9,8 @@ constexpr uint64_t nanosecs_in_sec = 1'000'000'000;
 
 #define TIME_RESET _time_begin = get_time();
 
-#define TIME_SETUP          \
-    uint64_t _time_begin;   \
-    uint64_t _time_end;     \
+#define TIME_SETUP                      \
+    uint64_t _time_begin, _time_end;    \
     TIME_RESET
 
 #define TIME_END(TIME_VAR)                          \
@@ -36,7 +35,7 @@ static uint64_t get_time()
 [[nodiscard, maybe_unused]]
 static double dtime(uint64_t t)
 {
-    return (double)t / 1e9;
+    return (double)t / nanosecs_in_sec;
 }
 
 #endif
