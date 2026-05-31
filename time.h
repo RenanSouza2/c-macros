@@ -30,13 +30,19 @@ static uint64_t get_time()
 {
     struct timespec time;
     clock_gettime(CLU_CLOCK_ID, &time);
+<<<<<<< HEAD
     return ((uint64_t)time.tv_sec * nanosecs_in_sec) + (uint64_t)time.tv_nsec;
+=======
+    constexpr uint64_t nanoseconds_per_second = 1'000'000'000;
+    return ((uint64_t)time.tv_sec * nanoseconds_per_second) + (uint64_t)time.tv_nsec;
+>>>>>>> origin/v3.3
 }
 
 [[nodiscard, maybe_unused]]
 static double dtime(uint64_t t)
 {
-    return (double)t / 1e9;
+    constexpr uint64_t nanoseconds_per_second = 1'000'000'000;
+    return (double)t / nanoseconds_per_second;
 }
 
 #endif
