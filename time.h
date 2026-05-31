@@ -7,8 +7,9 @@
 
 #define TIME_RESET _time_begin = get_time();
 
-#define TIME_SETUP                      \
-    uint64_t _time_begin, _time_end;    \
+#define TIME_SETUP          \
+    uint64_t _time_begin;   \
+    uint64_t _time_end;     \
     TIME_RESET
 
 #define TIME_END(TIME_VAR)                          \
@@ -27,13 +28,15 @@ static uint64_t get_time()
 {
     struct timespec time;
     clock_gettime(CLU_CLOCK_ID, &time);
-    return ((uint64_t)time.tv_sec * 1000000000ULL) + (uint64_t)time.tv_nsec;
+    constexpr uint64_t nanoseconds_per_second = 1'000'000'000;
+    return ((uint64_t)time.tv_sec * nanoseconds_per_second) + (uint64_t)time.tv_nsec;
 }
 
 [[nodiscard, maybe_unused]]
 static double dtime(uint64_t t)
 {
-    return (double)t / 1e9;
+    constexpr uint64_t nanoseconds_per_second = 1'000'000'000;
+    return (double)t / nanoseconds_per_second;
 }
 
 #endif

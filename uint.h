@@ -15,7 +15,7 @@ typedef signed _BitInt(128) int128_t;
 #define MUL(V1, V2) (U128(V1) * U128(V2))
 #define LOW(V) U64(V)
 #define HIGH(V) U64((V) >> 64)
-#define B(BITS) (1ULL << (BITS))
+#define B(BITS) (U64(1) << (BITS))
 #define B128(BITS) (U128(1) << (BITS))
 
 constexpr uint128_t UINT128_MAX = ~U128(0);
