@@ -3,7 +3,9 @@
 
 #include <time.h>
 
-#include "uint.h"
+#include "uint.h" // IWYU pragma: keep
+
+constexpr uint64_t nanosecs_in_sec = 1'000'000'000;
 
 #define TIME_RESET _time_begin = get_time();
 
@@ -16,18 +18,24 @@
     uint64_t TIME_VAR = _time_end - _time_begin;    \
     _time_begin = _time_end;
 
-#if defined(__linux__)
+#ifdef __linux__
     #define CLU_CLOCK_ID CLOCK_MONOTONIC_RAW
-#elif defined(__APPLE__)
+#elifdef __APPLE__
     #define CLU_CLOCK_ID CLOCK_MONOTONIC
 #endif
 
-__attribute__((unused)) 
-static uint64_t get_time(void)
+[[nodiscard, maybe_unused]]
+static uint64_t get_time()
 {
     struct timespec time;
     clock_gettime(CLU_CLOCK_ID, &time);
-    return (uint64_t)time.tv_sec * 1000000000ULL + (uint64_t)time.tv_nsec;
+    return ((uint64_t)time.tv_sec * nanosecs_in_sec) + (uint64_t)time.tv_nsec;
+}
+
+[[nodiscard, maybe_unused]]
+static double dtime(uint64_t t)
+{
+    return (double)t / nanosecs_in_sec;
 }
 
 #endif

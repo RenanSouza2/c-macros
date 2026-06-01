@@ -1,31 +1,25 @@
 #ifndef __MACROS_FORK_H__
 #define __MACROS_FORK_H__
 
-#include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
-__attribute__((unused))
-static pid_t fork_safe(void)
+#include "assert.h"
+
+[[nodiscard, maybe_unused]]
+static pid_t fork_safe()
 {
     pid_t pid = fork();
-    if(pid < 0)
-    {
-        exit(EXIT_FAILURE);
-    }
-
+    assert(pid >= 0);
     return pid;
 }
 
-__attribute__((unused))
+[[maybe_unused]]
 static pid_t waitpid_safe(pid_t pid, int *status)
 {
     int _status;
     pid_t pid_return = waitpid(pid, &_status, 0);
-    if(pid_return <= 0)
-    {
-        exit(EXIT_FAILURE);
-    }
+    assert(pid_return >= 0);
 
     if(status)
     {

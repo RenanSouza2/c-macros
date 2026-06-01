@@ -1,7 +1,7 @@
 #ifndef __ASSERT_H__
 #define __ASSERT_H__
 
-#include <stdio.h>
+#include <stdio.h> // IWYU pragma: keep
 #include <stdlib.h>
 #include <assert.h>
 
@@ -23,23 +23,11 @@
 
 
 
-#ifdef __linux__
-
-#define __FN __ASSERT_FUNCTION
-
-#elif defined __APPLE__
-
-#define __FN __func__
-
-#endif
-
-
-
 #define assert(COND)                \
     if(!(COND))                     \
     {                               \
         fprintf(stderr, "\n\n");    \
-        fprintf(stderr, "%s:%d: %s: Assertion '%s' failed\n", __FILE__, __LINE__, __FN, #COND);  \
+        fprintf(stderr, "%s:%d: %s: Assertion '%s' failed\n", __FILE__, __LINE__, __func__, #COND); \
         fprintf(stderr, "\n");      \
         TRIGGER_SANITIZER           \
         exit(EXIT_FAILURE);         \
