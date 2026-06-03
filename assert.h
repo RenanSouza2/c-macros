@@ -23,14 +23,16 @@
 
 
 
-#define assert(COND)                \
-    if(!(COND))                     \
-    {                               \
-        fprintf(stderr, "\n\n");    \
-        fprintf(stderr, "%s:%d: %s: Assertion '%s' failed\n", __FILE__, __LINE__, __func__, #COND); \
-        fprintf(stderr, "\n");      \
-        TRIGGER_SANITIZER           \
-        exit(EXIT_FAILURE);         \
+#define assert(COND)                    \
+    {                                   \
+        if(!(COND))                     \
+        {                               \
+            fprintf(stderr, "\n\n");    \
+            fprintf(stderr, "%s:%d: %s: Assertion '%s' failed\n", __FILE__, __LINE__, __func__, #COND); \
+            fprintf(stderr, "\n");      \
+            TRIGGER_SANITIZER           \
+            exit(EXIT_FAILURE);         \
+        }                               \
     }
 
 
