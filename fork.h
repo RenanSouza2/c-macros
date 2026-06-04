@@ -1,5 +1,5 @@
-#ifndef __MACROS_FORK_H__
-#define __MACROS_FORK_H__
+#ifndef MACROS_FORK_H
+#define MACROS_FORK_H
 
 #include <sys/wait.h>
 #include <unistd.h>

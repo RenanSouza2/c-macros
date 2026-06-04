@@ -1,5 +1,5 @@
-#ifndef __U64_H__
-#define __U64_H__
+#ifndef U64_H
+#define U64_H
 
 #include <stdint.h>
 #include <inttypes.h>

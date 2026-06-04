@@ -1,5 +1,5 @@
-#ifndef __STATIC_H__
-#define __STATIC_H__
+#ifndef STATIC_H
+#define STATIC_H
 
 #ifdef DEBUG
 
@@ -11,4 +11,4 @@
 
 #endif // DEBUG
 
-#endif // __STATIC_H__
+#endif // STATIC_H

@@ -1,5 +1,5 @@
-#ifndef __TEST_H__
-#define __TEST_H__
+#ifndef TEST_H
+#define TEST_H
 
 #include <signal.h>
 #include <stdarg.h>
@@ -191,7 +191,7 @@ static pid_t start_revert(uint64_t _tag, uint64_t line, const char func[])
 #define TEST_REVERT_CLOSE       \
             exit(EXIT_SUCCESS); \
         }                       \
-        _test_memory = false;  \
+        _test_memory = false;   \
     }
 
 #define ARG_OPEN(...) __VA_ARGS__
