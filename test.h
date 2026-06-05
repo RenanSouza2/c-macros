@@ -15,9 +15,11 @@ constexpr uint64_t TEST_FUZZ_TAG_MULTIPLIER = 1000000;
 
 #define TEST_LIB printf("\n%s\t\t", __func__);
 
+#define FUNC_TAG __func__
+
 #define TEST_FN_OPEN                    \
     {                                   \
-        printf("\n\t%s\t\t", __func__); \
+        printf("\n\t%s\t\t", FUNC_TAG); \
         bool _is_main_process = true;   \
         bool _test_memory = true;       \
         uint64_t _tag = 0;
@@ -52,7 +54,13 @@ static void test_log_error(
 
 // returns true if main process
 [[nodiscard, maybe_unused]]
-static bool start_case(uint64_t _tag, uint64_t line, const char func[], bool show, uint64_t timeout_ms)
+static bool start_case(
+    uint64_t _tag,
+    uint64_t line,
+    const char func[],
+    bool show,
+    uint64_t timeout_ms
+)
 {
     if(show)
     {
@@ -121,7 +129,7 @@ static bool start_case(uint64_t _tag, uint64_t line, const char func[], bool sho
     if(_is_main_process)                                                        \
     {                                                                           \
         _tag = (uint64_t)(TAG);                                                 \
-        _is_main_process = start_case(_tag, __LINE__, __func__, show, TIMEOUT); \
+        _is_main_process = start_case(_tag, __LINE__, FUNC_TAG, show, TIMEOUT); \
         if(!_is_main_process)                                                   \
         {
 
