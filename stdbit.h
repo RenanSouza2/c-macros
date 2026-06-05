@@ -33,7 +33,7 @@
 
     // Bit Width (log2)
     #define stdc_bit_width(x) \
-        ((x) == 0 ? 0 : (sizeof(x) * 8 - stdc_leading_zeros(x)))
+        ((x) == 0 ? 0 : ((sizeof(x) * 8) - stdc_leading_zeros(x)))
 
     #define stdc_bit_ceil(x) \
         ((x) <= 1 ? 1 : ((uint64_t)1 << stdc_bit_width((x) - 1)))
