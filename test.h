@@ -8,6 +8,7 @@
 #include "assert.h"
 #include "fork.h"
 #include "uint.h"
+#include "utils.h" // IWYU pragma: keep
 
 constexpr uint64_t TEST_MS_PER_SEC = 1000;
 constexpr uint64_t TEST_NS_PER_MS = 1000000;
@@ -201,7 +202,5 @@ static pid_t start_revert(uint64_t _tag, uint64_t line, const char func[])
         }                       \
         _test_memory = false;   \
     }
-
-#define ARG_OPEN(...) __VA_ARGS__
 
 #endif

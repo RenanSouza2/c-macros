@@ -1,16 +1,19 @@
-#ifndef STATIC_H
-#define STATIC_H
+#ifndef SPECIFIERS_H
+#define SPECIFIERS_H
 
 #ifdef DEBUG
 
-#define STATIC
-#define INLINE
+#define ONLY_DBG(...) __VA_ARGS__
+#define ONLY_PRD(...)
 
 #else // DEBUG
 
-#define STATIC static
-#define INLINE inline
+#define ONLY_DBG(...)
+#define ONLY_PRD(...) __VA_ARGS__
 
 #endif // DEBUG
 
-#endif // STATIC_H
+#define STATIC ONLY_PRD(static)
+#define INLINE ONLY_PRD(inline)
+
+#endif // SPECIFIERS_H
