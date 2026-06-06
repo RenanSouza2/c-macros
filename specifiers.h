@@ -4,10 +4,12 @@
 #ifdef DEBUG
 
 #define STATIC
+#define INLINE
 
 #else // DEBUG
 
 #define STATIC static
+#define INLINE inline
 
 #endif // DEBUG
 
