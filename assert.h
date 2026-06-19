@@ -21,22 +21,6 @@
 
 #endif // DEBUG
 
-
-
-#define assert(COND)                    \
-    {                                   \
-        if(!(COND))                     \
-        {                               \
-            fprintf(stderr, "\n\n");    \
-            fprintf(stderr, "%s:%d: %s: Assertion '%s' failed\n", __FILE__, __LINE__, __func__, #COND); \
-            fprintf(stderr, "\n");      \
-            TRIGGER_SANITIZER           \
-            exit(EXIT_FAILURE);         \
-        }                               \
-    }
-
-
-
 #define tprintf(...)                            \
     {                                           \
         fprintf(stderr, "\n%s\t| ", __func__);  \
@@ -44,6 +28,31 @@
         fprintf(stderr, "\t");                  \
     }
 
+#if defined(DEBUG) || defined(ASSERT_VERBOSE)
 
+#define assert(COND)                                                                                    \
+    {                                                                                                   \
+        if(!(COND))                                                                                     \
+        {                                                                                               \
+            fprintf(stderr, "\n\n");                                                                    \
+            fprintf(stderr, "%s:%d: %s: Assertion '%s' failed\n", __FILE__, __LINE__, __func__, #COND); \
+            fprintf(stderr, "\n");                                                                      \
+            TRIGGER_SANITIZER                                                                           \
+            exit(EXIT_FAILURE);                                                                         \
+        }                                                                                               \
+    }
+
+
+#else
+
+#define assert(COND)            \
+    {                           \
+        if(!(COUND))            \
+        {                       \
+            exit(EXIT_FAILURE); \
+        }                       \
+    }
+
+#endif // DEBUG || ASSERT_VERBOSE
 
 #endif // ASSERT_H
