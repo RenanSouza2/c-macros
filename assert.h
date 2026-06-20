@@ -47,7 +47,7 @@
 
 #define assert(COND)            \
     {                           \
-        if(!(COUND))            \
+        if(!(COND))             \
         {                       \
             exit(EXIT_FAILURE); \
         }                       \
