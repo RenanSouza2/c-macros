@@ -21,12 +21,10 @@
 
 #endif // DEBUG
 
-#define tprintf(...)                            \
-    {                                           \
-        fprintf(stderr, "\n%s\t| ", __func__);  \
-        fprintf(stderr, __VA_ARGS__);           \
-        fprintf(stderr, "\t");                  \
-    }
+// single fprintf call so the whole line reaches the fd in one write(),
+// keeping lines from interwoven processes from splitting mid-line
+#define tprintf(FMT, ...) \
+    fprintf(stderr, "\n%s\t| " FMT "\t", __func__ __VA_OPT__(,) __VA_ARGS__)
 
 #if defined(DEBUG) || defined(ASSERT_VERBOSE)
 
