@@ -1,5 +1,5 @@
-#ifndef CLU_STDBIT_FIX_H
-#define CLU_STDBIT_FIX_H
+#ifndef MACROS_STDBIT_H
+#define MACROS_STDBIT_H
 
 // 1. If the system actually has the file (Linux/Future Mac), use it.
 #if __has_include(<stdbit.h>)
@@ -7,20 +7,22 @@
 
 // 2. Otherwise, map the C23 standard names to Clang builtins
 #else // has stdbit.h
-    // Count Leading Zeros (clz)
-    #define stdc_trailing_zeros(x)                  \
-        ((unsigned int)_Generic((x),                \
-            unsigned int: __builtin_ctz(x),         \
-            unsigned long: __builtin_ctzl(x),       \
-            unsigned long long: __builtin_ctzll(x), \
+    // Count Trailing Zeros (ctz)
+    #define stdc_trailing_zeros(x)                       \
+        ((x) == 0 ? (unsigned int)(sizeof(x) * 8) :      \
+        (unsigned int)_Generic((x),                      \
+            unsigned int: __builtin_ctz(x),              \
+            unsigned long: __builtin_ctzl(x),            \
+            unsigned long long: __builtin_ctzll(x),      \
             default: __builtin_ctz(x)))
 
-    // Count Trailing Zeros (ctz)
-    #define stdc_leading_zeros(x)                   \
-        ((unsigned int)_Generic((x),                \
-            unsigned int: __builtin_clz(x),         \
-            unsigned long: __builtin_clzl(x),       \
-            unsigned long long: __builtin_clzll(x), \
+    // Count Leading Zeros (clz)
+    #define stdc_leading_zeros(x)                        \
+        ((x) == 0 ? (unsigned int)(sizeof(x) * 8) :      \
+        (unsigned int)_Generic((x),                      \
+            unsigned int: __builtin_clz(x),              \
+            unsigned long: __builtin_clzl(x),            \
+            unsigned long long: __builtin_clzll(x),      \
             default: __builtin_clz(x)))
 
     // Count Ones (popcount)

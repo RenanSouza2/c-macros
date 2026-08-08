@@ -1,5 +1,5 @@
-#ifndef U64_H
-#define U64_H
+#ifndef MACROS_UINT_H
+#define MACROS_UINT_H
 
 #include <stdint.h>
 #include <inttypes.h>

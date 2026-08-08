@@ -25,6 +25,10 @@ static pid_t waitpid_safe(pid_t pid, int *status)
     {
         *status = _status;
     }
+    else
+    {
+        assert(_status == EXIT_SUCCESS);
+    }
 
     return pid_return;
 }

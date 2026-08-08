@@ -1,5 +1,5 @@
-#ifndef TIME_H
-#define TIME_H
+#ifndef MACROS_TIME_H
+#define MACROS_TIME_H
 
 #include <time.h>
 

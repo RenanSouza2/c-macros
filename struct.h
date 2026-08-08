@@ -1,4 +1,5 @@
-#ifndef STRUCT
+#ifndef MACROS_STRUCT_H
+#define MACROS_STRUCT_H
 
 #define STRUCT(NAME)                    \
     typedef struct _##NAME NAME##_t;    \
@@ -9,4 +10,4 @@
 
 typedef void * handler_p;
 
-#endif
+#endif // MACROS_STRUCT_H

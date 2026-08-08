@@ -1,5 +1,5 @@
-#ifndef SPECIFIERS_H
-#define SPECIFIERS_H
+#ifndef MACROS_SPECIFIERS_H
+#define MACROS_SPECIFIERS_H
 
 #ifdef DEBUG
 
@@ -16,4 +16,4 @@
 #define STATIC ONLY_PRD(static)
 #define INLINE ONLY_PRD(inline)
 
-#endif // SPECIFIERS_H
+#endif // MACROS_SPECIFIERS_H

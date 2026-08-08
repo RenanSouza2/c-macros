@@ -1,5 +1,5 @@
-#ifndef TEST_H
-#define TEST_H
+#ifndef MACROS_TEST_H
+#define MACROS_TEST_H
 
 #include <signal.h>
 #include <stdarg.h>

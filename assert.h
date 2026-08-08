@@ -1,5 +1,5 @@
-#ifndef ASSERT_H
-#define ASSERT_H
+#ifndef MACROS_ASSERT_H
+#define MACROS_ASSERT_H
 
 #include <stdio.h> // IWYU pragma: keep
 #include <stdlib.h>
@@ -55,4 +55,4 @@
 
 #endif // DEBUG || ASSERT_VERBOSE
 
-#endif // ASSERT_H
+#endif // MACROS_ASSERT_H
