@@ -22,9 +22,11 @@
 #endif // DEBUG
 
 // single fprintf call so the whole line reaches the fd in one write(),
-// keeping lines from interwoven processes from splitting mid-line
+// keeping lines from interwoven processes from splitting mid-line;
+// %-16s (rather than %s\t) keeps the column aligned regardless of
+// __func__'s length, since a tab only lands on 16 by luck
 #define tprintf(FMT, ...) \
-    fprintf(stderr, "\n%s\t| " FMT "\t", __func__ __VA_OPT__(,) __VA_ARGS__)
+    fprintf(stderr, "\n%-16s| " FMT "\t", __func__ __VA_OPT__(,) __VA_ARGS__)
 
 #if defined(DEBUG) || defined(ASSERT_VERBOSE)
 
