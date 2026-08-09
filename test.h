@@ -1,5 +1,5 @@
-#ifndef __TEST_H__
-#define __TEST_H__
+#ifndef MACROS_TEST_H
+#define MACROS_TEST_H
 
 #include <signal.h>
 #include <stdarg.h>
@@ -13,11 +13,14 @@ constexpr uint64_t TEST_MS_PER_SEC = 1000;
 constexpr uint64_t TEST_NS_PER_MS = 1000000;
 constexpr uint64_t TEST_FUZZ_TAG_MULTIPLIER = 1000000;
 
+// TODO TIMEOUT LIB
 #define TEST_LIB printf("\n%s\t\t", __func__);
+
+#define FUNC_TAG __func__
 
 #define TEST_FN_OPEN                    \
     {                                   \
-        printf("\n\t%s\t\t", __func__); \
+        printf("\n\t%s\t\t", FUNC_TAG); \
         bool _is_main_process = true;   \
         bool _test_memory = true;       \
         uint64_t _tag = 0;
@@ -47,12 +50,18 @@ static void test_log_error(
     printf("\n\n\tERROR TEST\t| f: %s | l: " U64P() " | tag: " U64P() " | ", func, line, _tag);
     vprintf(format, args);
     printf("\n\n");
-    assert(false);
+    revert()
 }
 
 // returns true if main process
 [[nodiscard, maybe_unused]]
-static bool start_case(uint64_t _tag, uint64_t line, const char func[], bool show, uint64_t timeout_ms)
+static bool start_case(
+    uint64_t _tag,
+    uint64_t line,
+    const char func[],
+    bool show,
+    uint64_t timeout_ms
+)
 {
     if(show)
     {
@@ -121,7 +130,7 @@ static bool start_case(uint64_t _tag, uint64_t line, const char func[], bool sho
     if(_is_main_process)                                                        \
     {                                                                           \
         _tag = (uint64_t)(TAG);                                                 \
-        _is_main_process = start_case(_tag, __LINE__, __func__, show, TIMEOUT); \
+        _is_main_process = start_case(_tag, __LINE__, FUNC_TAG, show, TIMEOUT); \
         if(!_is_main_process)                                                   \
         {
 
@@ -191,7 +200,7 @@ static pid_t start_revert(uint64_t _tag, uint64_t line, const char func[])
 #define TEST_REVERT_CLOSE       \
             exit(EXIT_SUCCESS); \
         }                       \
-        _test_memory = false;  \
+        _test_memory = false;   \
     }
 
 #define ARG_OPEN(...) __VA_ARGS__

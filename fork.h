@@ -1,5 +1,5 @@
-#ifndef __MACROS_FORK_H__
-#define __MACROS_FORK_H__
+#ifndef MACROS_FORK_H
+#define MACROS_FORK_H
 
 #include <sys/wait.h>
 #include <unistd.h>
@@ -24,6 +24,10 @@ static pid_t waitpid_safe(pid_t pid, int *status)
     if(status)
     {
         *status = _status;
+    }
+    else
+    {
+        assert(_status == EXIT_SUCCESS);
     }
 
     return pid_return;
