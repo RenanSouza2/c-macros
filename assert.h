@@ -37,7 +37,7 @@
 
 #else
 
-#define TRAP(MSG) exit(EXIT_FAILURE)
+#define TRAP(MSG) exit(EXIT_FAILURE);
 
 #endif // DEBUG || ASSERT_VERBOSE
 
@@ -45,7 +45,7 @@
     {                                               \
         if(!(COND))                                 \
         {                                           \
-            TRAP("Assertion '" #COND "' failed");   \
+            TRAP("Assertion '" #COND "' failed")    \
         }                                           \
     }
 
