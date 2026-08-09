@@ -26,13 +26,13 @@
 
 #if defined(DEBUG) || defined(ASSERT_VERBOSE)
 
-#define TRAP(MSG)                                                          \
-    {                                                                     \
-        fprintf(stderr, "\n\n");                                         \
-        fprintf(stderr, "%s:%d: %s: " MSG "\n", __FILE__, __LINE__, __func__); \
-        fprintf(stderr, "\n");                                           \
-        TRIGGER_SANITIZER                                                \
-        exit(EXIT_FAILURE);                                              \
+#define TRAP(MSG)                                                               \
+    {                                                                           \
+        fprintf(stderr, "\n\n");                                                \
+        fprintf(stderr, "%s:%d: %s: " MSG "\n", __FILE__, __LINE__, __func__);  \
+        fprintf(stderr, "\n");                                                  \
+        TRIGGER_SANITIZER                                                       \
+        exit(EXIT_FAILURE);                                                     \
     }
 
 #else
@@ -49,8 +49,6 @@
         }                                           \
     }
 
-// use for "should never happen" spots (e.g. the last case of a switch, or
-// after a loop that always returns) instead of assert(false) — see TRAP
-#define UNREACHABLE() TRAP("Reached unreachable code")
+#define revert() TRAP("Reached unreachable code")
 
 #endif // MACROS_ASSERT_H

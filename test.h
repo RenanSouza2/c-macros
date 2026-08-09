@@ -50,7 +50,7 @@ static void test_log_error(
     printf("\n\n\tERROR TEST\t| f: %s | l: " U64P() " | tag: " U64P() " | ", func, line, _tag);
     vprintf(format, args);
     printf("\n\n");
-    UNREACHABLE()
+    revert()
 }
 
 // returns true if main process
