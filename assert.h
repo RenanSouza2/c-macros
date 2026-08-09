@@ -29,7 +29,7 @@
 #define TRAP(MSG)                                                               \
     {                                                                           \
         fprintf(stderr, "\n\n");                                                \
-        fprintf(stderr, "%s:%d: %s: " MSG "\n", __FILE__, __LINE__, __func__);  \
+        fprintf(stderr, "%s:%d: %s: %s\n", __FILE__, __LINE__, __func__, MSG);  \
         fprintf(stderr, "\n");                                                  \
         TRIGGER_SANITIZER                                                       \
         exit(EXIT_FAILURE);                                                     \
