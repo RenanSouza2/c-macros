@@ -38,4 +38,19 @@ static double dtime(uint64_t t)
     return (double)t / nanosecs_in_sec;
 }
 
+// Wall-clock (CLOCK_REALTIME, i.e. Unix epoch) time as a double, for log
+// lines a consumer needs to compare against its own epoch clock (e.g. a
+// dashboard replaying a log file after a restart, where get_time()'s
+// CLOCK_MONOTONIC[_RAW] value -- meant for in-process duration math via
+// TIME_SETUP/TIME_END -- has no meaningful cross-process reference point).
+// CLOCK_REALTIME is POSIX-standard on both Linux and macOS, so no ifdef is
+// needed here the way CLU_CLOCK_ID needs one above.
+[[nodiscard, maybe_unused]]
+static double get_wall_time()
+{
+    struct timespec time;
+    clock_gettime(CLOCK_REALTIME, &time);
+    return (double)time.tv_sec + ((double)time.tv_nsec / (double)nanosecs_in_sec);
+}
+
 #endif
